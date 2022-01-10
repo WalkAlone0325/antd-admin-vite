@@ -10,7 +10,7 @@ export interface IRouteConfig {
   key: string
   icon?: JSX.Element
   component?: LazyExoticComponent<any>
-  componentPath: string
+  componentPath?: string
   children?: IRouteConfig[]
 }
 
@@ -27,7 +27,6 @@ export const routes: IRouteConfig[] = [
     name: '列表',
     key: 'list',
     icon: <AppleOutlined />,
-    componentPath: 'search-table',
     children: [
       {
         name: '搜索',

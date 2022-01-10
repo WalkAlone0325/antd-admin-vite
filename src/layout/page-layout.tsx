@@ -31,7 +31,7 @@ function getFlattenRoutes() {
         // route.component = import(`../pages/${route.componentPath}`)
         // route.component = Login
         res.push(route)
-      } else if (isArray(route.children) && route.children.length) {
+      } else if (isArray(route.children) && route.children?.length) {
         travel(route.children)
       }
     })
@@ -56,7 +56,7 @@ function renderRoutes() {
         if (level > 1) {
           return (
             <MenuItem key={route.key} icon={route.icon}>
-              {titleDom}
+              <Link to={`/${route.key}`}>{titleDom}</Link>
             </MenuItem>
           )
         }
