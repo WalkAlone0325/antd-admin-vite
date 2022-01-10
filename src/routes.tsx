@@ -1,4 +1,8 @@
-import { WindowsOutlined, AppleOutlined } from '@ant-design/icons'
+import {
+  WindowsOutlined,
+  AppleOutlined,
+  SearchOutlined
+} from '@ant-design/icons'
 import { LazyExoticComponent } from 'react'
 
 export interface IRouteConfig {
@@ -28,6 +32,7 @@ export const routes: IRouteConfig[] = [
       {
         name: '搜索',
         key: 'list/search-table',
+        icon: <SearchOutlined />,
         componentPath: 'search-table'
       }
     ]

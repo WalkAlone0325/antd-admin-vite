@@ -1,5 +1,5 @@
 import { Layout, Menu } from 'antd'
-import { lazy, useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { ReducerState } from '@/redux'
@@ -8,6 +8,7 @@ import lazyload from '@/utils/lazyload'
 import { routes, defaultRoute, IRouteConfig } from '@/routes'
 import styles from './style/layout.module.less'
 import { Link, Redirect, Route, Switch } from 'react-router-dom'
+import Login from '@/pages/login'
 
 const { Sider, Content } = Layout
 // const { SubMenu, Item: MenuItem } = Menu
@@ -22,18 +23,21 @@ function getFlattenRoutes() {
   const res: IRouteConfig[] = []
 
   function travel(_routes: IRouteConfig[]) {
+    console.log(_routes)
     _routes.forEach((route) => {
+      console.log(route)
       if (route.componentPath) {
-        route.component = lazyload(
-          () => import(`../pages/${route.componentPath}`)
-        )
+        route.component = lazy(() => import(`../pages/${route.componentPath}`))
+        // route.component = import(`../pages/${route.componentPath}`)
+        // route.component = Login
         res.push(route)
-      } else if (isArray(route.children) && route.children?.length) {
+      } else if (isArray(route.children) && route.children.length) {
         travel(route.children)
       }
     })
   }
   travel(routes)
+  console.log(res)
   return res
 }
 
@@ -79,6 +83,7 @@ function renderRoutes() {
     })
   }
   travel(routes, 1)
+  console.log(nodes)
   return nodes
 }
 
@@ -132,18 +137,20 @@ function PageLayout() {
         )}
         <Layout className={styles.layoutContent}>
           <Content>
-            <Switch>
-              {flattenRoutes.map((route, index) => {
-                return (
-                  <Route
-                    key={index}
-                    path={`/${route.key}`}
-                    component={route.component}
-                  />
-                )
-              })}
-              <Redirect push to={`${defaultRoute}`} />
-            </Switch>
+            <Suspense fallback>
+              <Switch>
+                {flattenRoutes.map((route, index) => {
+                  return (
+                    <Route
+                      key={index}
+                      path={`/${route.key}`}
+                      component={route.component}
+                    />
+                  )
+                })}
+                <Redirect push to={`${defaultRoute}`} />
+              </Switch>
+            </Suspense>
           </Content>
         </Layout>
       </Layout>

@@ -17,7 +17,7 @@ function LoadingComponent(props) {
     console.error(props.error)
     return null
   }
-  return <div className={styles.spin}>{/* <Spin /> */}</div>
+  return <div className={styles.spin}>123{/* <Spin /> */}</div>
 }
 
 export default (loader) =>
