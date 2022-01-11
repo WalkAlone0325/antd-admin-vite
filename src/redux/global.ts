@@ -1,6 +1,7 @@
 import defaultSettings from '@/settings.json'
+import { SiderTheme } from 'antd/lib/layout/Sider'
 
-const defaultTheme = localStorage.getItem('antd-theme') || 'light'
+const defaultTheme = (localStorage.getItem('antd-theme') as SiderTheme) || 'light'
 
 function changeTheme(newTheme?: 'string') {
   if ((newTheme || defaultTheme) === 'dark') {
@@ -14,13 +15,15 @@ function changeTheme(newTheme?: 'string') {
 changeTheme()
 
 export interface GlobalState {
-  theme?: string
+  theme?: SiderTheme
   settings: typeof defaultSettings
+  collapsed?: boolean
 }
 
 const initialState: GlobalState = {
   theme: defaultTheme,
-  settings: defaultSettings
+  settings: defaultSettings,
+  collapsed: false
 }
 
 export default function (state = initialState, action) {
@@ -43,6 +46,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         settings
+      }
+    }
+      
+    case 'toggle-collapsed': {
+      const { collapsed } = action.payload
+      return {
+        ...state,
+        collapsed,
       }
     }
     
